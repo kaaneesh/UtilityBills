@@ -1,0 +1,139 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f2f4f7;
+  padding: 12px;
+}
+
+/* CARD */
+.card {
+  background: #ffffff;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  overflow: hidden; /* ensure child elements (buttons) don’t overflow rounded corners */
+}
+.card-header {
+  background: #4a90e2;
+  color: #fff;
+  padding: 12px 16px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+}
+.card-content {
+  padding: 16px;
+}
+
+/* HEADINGS */
+.card h2,
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+/* INPUTS & BUTTONS */
+input,
+button {
+  width: 100%;
+  box-sizing: border-box;   /* 🔴 IMPORTANT FIX */
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+input {
+  border: 1px solid #ccc;
+  background: #fafafa;
+  transition: border-color 0.2s;
+}
+input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  background: #fff;
+}
+
+button {
+  background: #5870a3; /* softer blue */
+  color: #fff;
+  border: none;
+  margin-top: 14px;
+  cursor: pointer;
+  transition: filter 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 4px; /* ensure button corners match card padding */
+}
+
+button:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* predefined color variants */
+.btn-primary { background: #5870a3; }
+.btn-secondary { background: #4a90e2; }
+.btn-danger { background: #e26a6a; }
+.btn-warning { background: #e2b04a; }
+.btn-cloud { background: #a36cbf; }
+.btn-cancel { background: #aaa; }
+
+
+/* ensure full width when used in groups */
+.button-group button {
+  width: 100%;
+  margin-top: 0;
+}
+
+/* spacing for buttons inside card content */
+.card-content button {
+  margin: 8px 0;
+}
+
+/* additional padding around grouped buttons (export/cloud backup area) */
+.button-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 16px; /* extra padding inside the card */
+}
+
+/* icon spacing for buttons */
+.button-group button i {
+  margin-right: 8px;
+}
+
+
+/* TABLE */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px; /* extra breathing room above the table */
+}
+
+th, td {
+  border: 0.5px solid #ddd;
+  padding: 4px 4px; /* compact padding to keep rows shorter */
+  text-align: center;
+}
+.flats-td td input{
+    width: 95%;
+}
+
+/* Mobile responsive table scrolling */
+@media (max-width: 768px) {
+  .card {
+    overflow-x: auto;
+  }
+  table {
+    min-width: 600px;
+  }
+}
+
+/* HIDE */
+.hidden {
+  display: none;
+}
+#addFlatForm {
+  margin-top: 10px;
+}

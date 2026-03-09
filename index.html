@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Utility Bills</title>
+<link rel="stylesheet" href="styles.css">
+  <!-- icon font for action buttons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#ffffff">
+  <!-- Firebase SDK (for Firestore sync). Use the compat builds so the
+       global `firebase` namespace is available (our code calls
+       firebase.initializeApp etc). -->
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+
+<div id="login" class="card">
+  <div class="card-header">Caretaker Login</div>
+  <div class="card-content">
+    <input id="pin" type="password" placeholder="Enter PIN">
+    <button class="btn btn-primary" onclick="login()">Login</button>
+    <div style="margin-top: 12px; font-size: 12px; color: #999;">
+      <span id="syncStatus">Sync: Offline</span>
+    </div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+
+  <h2>Gas Meter</h2>
+
+  <div class="card">
+    <div class="card-header">Usage</div>
+    <div class="card-content">
+      <input id="month" type="month">
+      <input id="rate" type="number" placeholder="Rate per unit">
+      <button onclick="loadMonth()" class="btn btn-primary">Load Month</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Flats</div>
+    <div class="card-content">
+      <!-- Toggle button -->
+      <button class="btn btn-primary" onclick="toggleAddFlat()">+ Add Flat</button>
+
+      <!-- Hidden form -->
+      <div id="addFlatForm" class="hidden">
+        <input id="keyField" placeholder="2165990">
+        <input id="flatNo" placeholder="101">
+        <input id="sqft" type="number" placeholder="1224">
+        <input id="ownerName" placeholder="Owner Name">
+        <input id="mobileNumber" type="tel" placeholder="Mobile Number">
+        <button onclick="addFlat()">Save Flat</button>
+        <button class="btn btn-cancel" onclick="cancelEditFlat()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Flat</th>
+          <th>Previous</th>
+          <th>Current</th>
+          <th>Units</th>
+          <th>Amount</th>
+          <th>Waste Collected?</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="button-group">
+      <button class="btn btn-primary" onclick="exportCSV()"><i class="fa-solid fa-file-export"></i> Gas Reading CSV</button>
+      <button class="btn btn-primary" onclick="emailCSV()"><i class="fa-solid fa-envelope"></i> Email Gas Reading CSV</button>
+      <button class="btn btn-danger" onclick="exportWasteCSV()"><i class="fa-solid fa-file-export"></i> Export Waste Collection CSV</button>
+      <button class="btn btn-danger" onclick="emailWasteCSV()"><i class="fa-solid fa-envelope"></i> Email Waste Collection CSV</button>
+      <button class="btn btn-secondary" onclick="backupDatabase()"><i class="fa-solid fa-database"></i> Backup Database</button>
+      <button class="btn btn-warning" onclick="document.getElementById('restoreFile').click()"><i class="fa-solid fa-undo"></i> Restore Database</button>
+      <button class="btn btn-cloud" onclick="exportFromFirestore()"><i class="fa-solid fa-cloud-arrow-up"></i> Cloud Backup</button>
+      <button class="btn btn-cloud" onclick="document.getElementById('fsImportFile').click()"><i class="fa-solid fa-cloud-arrow-down"></i> Cloud Restore</button>
+    </div>
+    <input id="restoreFile" type="file" accept=".json" style="display: none;" onchange="restoreDatabase(event)">
+    <input id="fsImportFile" type="file" accept=".json" style="display: none;" onchange="importToFirestore(event)">
+  </div>
+</div>
+
+<script src="firestore-config.js"></script>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="utils.js"></script>
+<script src="firestore-sync.js"></script>
+<script src="app.js"></script>
+
+<script>
+  window.onload = () => {
+    initDB();   // ✅ DB is ready BEFORE login
+    initFirestore(); // make sure Firestore is kicked off early (no-op if mode != 'online')
+
+    // Register service worker for PWA offline support
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').then(reg => {
+        console.log('Service worker registered.', reg);
+      }).catch(err => console.warn('SW registration failed:', err));
+    }
+  };
+</script>
+
+</body>
+</html>
