@@ -743,23 +743,13 @@ function emailPhoto() {
     clearPhotoForm();
   };
 
-  // try Web Share API with file attachment
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    navigator.share({ files: [file], title: subject, text })
-      .catch(() => fallbackPhotoMail(text, subject))
-      .finally(hideAndClear);
-  } else if (navigator.share) {
-    // share as text only (image will not be attached)
-    navigator.share({ title: subject, text })
-      .catch(() => fallbackPhotoMail(text, subject))
-      .finally(hideAndClear);
-  } else {
-    fallbackPhotoMail(text, subject);
-    hideAndClear();
-  }
+  // always open email compose to the fixed address
+  const recipient = "confidentpinnacle.rwa@gmail.com";
+  fallbackPhotoMail(text, subject, recipient);
+  hideAndClear();
 }
 
-function fallbackPhotoMail(text, subject) {
+function fallbackPhotoMail(text, subject, to = "") {
   // copy description/date to clipboard so user can paste it
   if (navigator.clipboard && text) {
     navigator.clipboard.writeText(text).catch(() => {
@@ -767,6 +757,8 @@ function fallbackPhotoMail(text, subject) {
     });
   }
   const body = encodeURIComponent(`${text}\n\n[Please attach the photo manually]`);
-  const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${body}`;
+  // include recipient if provided
+  const toPart = to ? `${encodeURIComponent(to)}` : "";
+  const mailto = `mailto:${toPart}?subject=${encodeURIComponent(subject)}&body=${body}`;
   window.location.href = mailto;
 }
