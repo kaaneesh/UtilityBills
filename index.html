@@ -107,8 +107,8 @@
         <button type="button" id="uploadBtn" class="icon-btn" title="Upload existing">
           <i class="fa-solid fa-upload"></i>
         </button>
-        <input id="photoFileCamera" type="file" accept="image/*" capture="environment" onchange="previewPhoto(event)" style="display:none">
-        <input id="photoFileUpload" type="file" accept="image/*" onchange="previewPhoto(event)" style="display:none">
+        <input id="photoFileCamera" class="photo-input-hidden" type="file" accept="image/*" capture="environment" onchange="previewPhoto(event)">
+        <input id="photoFileUpload" class="photo-input-hidden" type="file" accept="image/*" onchange="previewPhoto(event)">
       </div>
       <img id="photoPreview" class="hidden" alt="Preview" style="max-width:100%; margin-top:8px;">
       <button onclick="emailPhoto()">Email Expense Info</button>
