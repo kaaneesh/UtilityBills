@@ -101,14 +101,10 @@
       <input id="photoDate" type="date">
       <textarea id="photoDesc" placeholder="Description"></textarea>
       <div class="photo-controls">
-        <button type="button" id="cameraBtn" class="icon-btn" title="Use camera">
+        <button type="button" id="photoBtn" class="icon-btn" title="Select or take photo">
           <i class="fa-solid fa-camera"></i>
         </button>
-        <button type="button" id="uploadBtn" class="icon-btn" title="Upload existing">
-          <i class="fa-solid fa-upload"></i>
-        </button>
-        <input id="photoFileCamera" class="photo-input-hidden" type="file" accept="image/*" capture="environment" onchange="previewPhoto(event)">
-        <input id="photoFileUpload" class="photo-input-hidden" type="file" accept="image/*" onchange="previewPhoto(event)">
+        <input id="photoFile" class="photo-input-hidden" type="file" accept="image/*" onchange="previewPhoto(event)">
       </div>
       <img id="photoPreview" class="hidden" alt="Preview" style="max-width:100%; margin-top:8px;">
       <button onclick="emailPhoto()">Email Expense Info</button>

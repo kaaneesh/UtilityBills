@@ -673,19 +673,12 @@ function previewPhoto(event) {
   }
 }
 
-// wiring for dedicated camera/upload buttons
+// wire single photo button to the hidden file input
 window.addEventListener('DOMContentLoaded', () => {
-  const cameraBtn = document.getElementById('cameraBtn');
-  const uploadBtn = document.getElementById('uploadBtn');
-  const cameraInput = document.getElementById('photoFileCamera');
-  const uploadInput = document.getElementById('photoFileUpload');
-
-  if (cameraBtn && cameraInput) {
-    cameraBtn.addEventListener('click', () => cameraInput.click());
-  }
-
-  if (uploadBtn && uploadInput) {
-    uploadBtn.addEventListener('click', () => uploadInput.click());
+  const photoBtn = document.getElementById('photoBtn');
+  const fileInput = document.getElementById('photoFile');
+  if (photoBtn && fileInput) {
+    photoBtn.addEventListener('click', () => fileInput.click());
   }
 });
 
@@ -699,13 +692,11 @@ function togglePhotoForm() {
 function clearPhotoForm() {
   const dateEl = document.getElementById('photoDate');
   const descEl = document.getElementById('photoDesc');
-  const camInput = document.getElementById('photoFileCamera');
-  const upInput = document.getElementById('photoFileUpload');
+  const fileInput = document.getElementById('photoFile');
   const img = document.getElementById('photoPreview');
   if (dateEl) dateEl.value = new Date().toISOString().slice(0,10);
   if (descEl) descEl.value = '';
-  if (camInput) camInput.value = '';
-  if (upInput) upInput.value = '';
+  if (fileInput) fileInput.value = '';
   if (img) {
     img.src = '';
     img.classList.add('hidden');
@@ -713,19 +704,11 @@ function clearPhotoForm() {
 }
 
 function emailPhoto() {
-  const camInput = document.getElementById('photoFileCamera');
-  const upInput = document.getElementById('photoFileUpload');
+  const fileInput = document.getElementById('photoFile');
   const dateEl = document.getElementById('photoDate');
   const descEl = document.getElementById('photoDesc');
 
-  // prefer whichever input has a file
-  const fileInput = (camInput && camInput.files && camInput.files.length)
-    ? camInput
-    : (upInput && upInput.files && upInput.files.length)
-      ? upInput
-      : null;
-
-  if (!fileInput) {
+  if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
     alert('Please select a photo to send');
     return;
   }
