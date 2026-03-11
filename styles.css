@@ -34,13 +34,25 @@ body {
 
 /* INPUTS & BUTTONS */
 input,
+textarea,
 button {
   width: 100%;
-  box-sizing: border-box;   /* 🔴 IMPORTANT FIX */
+  box-sizing: border-box;   /* 🔴 IMPORTANT Fix */
   padding: 10px;
   margin-top: 8px;
   border-radius: 4px;
   font-size: 16px;
+}
+
+textarea {
+  border: 1px solid #ccc;
+  background: #fafafa;
+  transition: border-color 0.2s;
+}
+textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+  background: #fff;
 }
 
 input {
@@ -136,4 +148,20 @@ th, td {
 }
 #addFlatForm {
   margin-top: 10px;
+}
+
+/* floating compose button */
+.floating-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }

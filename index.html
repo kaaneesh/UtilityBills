@@ -93,6 +93,23 @@
     <input id="restoreFile" type="file" accept=".json" style="display: none;" onchange="restoreDatabase(event)">
     <input id="fsImportFile" type="file" accept=".json" style="display: none;" onchange="importToFirestore(event)">
   </div>
+
+  <!-- Photo mailing module (hidden by default) -->
+  <div id="photoCard" class="card hidden">
+    <div class="card-header">Photo Mail</div>
+    <div class="card-content">
+      <input id="photoDate" type="date">
+      <textarea id="photoDesc" placeholder="Description"></textarea>
+      <input id="photoFile" type="file" accept="image/*" capture="environment" onchange="previewPhoto(event)">
+      <img id="photoPreview" class="hidden" alt="Preview" style="max-width:100%; margin-top:8px;">
+      <button onclick="emailPhoto()">Email Photo</button>
+    </div>
+  </div>
+
+  <!-- floating compose-style button -->
+  <button id="openPhotoBtn" class="btn btn-primary floating-btn" onclick="togglePhotoForm()" title="Email Photo">
+    <i class="fa-solid fa-paper-plane"></i>
+  </button>
 </div>
 
 <script src="firestore-config.js"></script>
@@ -106,6 +123,12 @@
   window.onload = () => {
     initDB();   // ✅ DB is ready BEFORE login
     initFirestore(); // make sure Firestore is kicked off early (no-op if mode != 'online')
+
+    // set default date for photo module to today
+    const photoDate = document.getElementById('photoDate');
+    if (photoDate) {
+      photoDate.value = new Date().toISOString().slice(0,10);
+    }
 
     // Register service worker for PWA offline support
     if ('serviceWorker' in navigator) {

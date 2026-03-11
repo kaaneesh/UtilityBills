@@ -658,3 +658,89 @@ function downloadJSON(filename, content) {
   a.download = filename;
   a.click();
 }
+
+// Photo mailing helpers --------------------------------------------------
+
+function previewPhoto(event) {
+  const file = event.target.files[0];
+  const img = document.getElementById('photoPreview');
+  if (file && img) {
+    img.src = URL.createObjectURL(file);
+    img.classList.remove('hidden');
+  } else if (img) {
+    img.src = '';
+    img.classList.add('hidden');
+  }
+}
+
+function togglePhotoForm() {
+  const card = document.getElementById('photoCard');
+  if (!card) return;
+  card.classList.toggle('hidden');
+  clearPhotoForm();
+}
+
+function clearPhotoForm() {
+  const dateEl = document.getElementById('photoDate');
+  const descEl = document.getElementById('photoDesc');
+  const fileInput = document.getElementById('photoFile');
+  const img = document.getElementById('photoPreview');
+  if (dateEl) dateEl.value = new Date().toISOString().slice(0,10);
+  if (descEl) descEl.value = '';
+  if (fileInput) fileInput.value = '';
+  if (img) {
+    img.src = '';
+    img.classList.add('hidden');
+  }
+}
+
+function emailPhoto() {
+  const fileInput = document.getElementById('photoFile');
+  const dateEl = document.getElementById('photoDate');
+  const descEl = document.getElementById('photoDesc');
+
+  if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+    alert('Please select a photo to send');
+    return;
+  }
+
+  const file = fileInput.files[0];
+  const dateVal = dateEl && dateEl.value ? dateEl.value : new Date().toISOString().slice(0, 10);
+  const descVal = descEl ? descEl.value.trim() : '';
+
+  const text = `Date: ${dateVal}\nDescription: ${descVal}`;
+  const subject = `Photo ${dateVal}`;
+
+  const hideAndClear = () => {
+    const card = document.getElementById('photoCard');
+    if (card) card.classList.add('hidden');
+    clearPhotoForm();
+  };
+
+  // try Web Share API with file attachment
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file], title: subject, text })
+      .catch(() => fallbackPhotoMail(text, subject))
+      .finally(hideAndClear);
+  } else if (navigator.share) {
+    // share as text only (image will not be attached)
+    navigator.share({ title: subject, text })
+      .catch(() => fallbackPhotoMail(text, subject))
+      .finally(hideAndClear);
+  } else {
+    fallbackPhotoMail(text, subject);
+    hideAndClear();
+  }
+}
+
+function fallbackPhotoMail(text, subject) {
+  // copy description/date to clipboard so user can paste it
+  if (navigator.clipboard && text) {
+    navigator.clipboard.writeText(text).catch(() => {
+      /* ignore */
+    });
+  }
+  const body = encodeURIComponent(`${text}\n\n[Please attach the photo manually]`);
+  const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${body}`;
+  window.location.href = mailto;
+}
