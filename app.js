@@ -673,6 +673,27 @@ function previewPhoto(event) {
   }
 }
 
+// wiring for dedicated camera/upload buttons
+window.addEventListener('DOMContentLoaded', () => {
+  const cameraBtn = document.getElementById('cameraBtn');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const fileInput = document.getElementById('photoFile');
+
+  if (cameraBtn && fileInput) {
+    cameraBtn.addEventListener('click', () => {
+      fileInput.capture = 'environment';
+      fileInput.click();
+    });
+  }
+
+  if (uploadBtn && fileInput) {
+    uploadBtn.addEventListener('click', () => {
+      fileInput.removeAttribute('capture');
+      fileInput.click();
+    });
+  }
+});
+
 function togglePhotoForm() {
   const card = document.getElementById('photoCard');
   if (!card) return;

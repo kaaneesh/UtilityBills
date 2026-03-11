@@ -100,9 +100,17 @@
     <div class="card-content">
       <input id="photoDate" type="date">
       <textarea id="photoDesc" placeholder="Description"></textarea>
-      <input id="photoFile" type="file" accept="image/*" capture="environment" onchange="previewPhoto(event)">
+      <div class="photo-controls">
+        <button type="button" id="cameraBtn" class="icon-btn" title="Use camera">
+          <i class="fa-solid fa-camera"></i>
+        </button>
+        <button type="button" id="uploadBtn" class="icon-btn" title="Upload existing">
+          <i class="fa-solid fa-upload"></i>
+        </button>
+        <input id="photoFile" type="file" accept="image/*" onchange="previewPhoto(event)" style="display:none">
+      </div>
       <img id="photoPreview" class="hidden" alt="Preview" style="max-width:100%; margin-top:8px;">
-      <button onclick="emailPhoto()">Email Photo</button>
+      <button onclick="emailPhoto()">Email Expense Info</button>
     </div>
   </div>
 

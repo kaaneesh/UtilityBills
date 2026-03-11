@@ -165,3 +165,21 @@ th, td {
   padding: 0;
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
+
+/* icon-button for photo controls */
+.icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  margin-right: 8px;
+  cursor: pointer;
+  color: #5870a3;
+}
+.icon-btn:hover {
+  color: #4a90e2;
+}
+.photo-controls {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
