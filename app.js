@@ -677,20 +677,15 @@ function previewPhoto(event) {
 window.addEventListener('DOMContentLoaded', () => {
   const cameraBtn = document.getElementById('cameraBtn');
   const uploadBtn = document.getElementById('uploadBtn');
-  const fileInput = document.getElementById('photoFile');
+  const cameraInput = document.getElementById('photoFileCamera');
+  const uploadInput = document.getElementById('photoFileUpload');
 
-  if (cameraBtn && fileInput) {
-    cameraBtn.addEventListener('click', () => {
-      fileInput.capture = 'environment';
-      fileInput.click();
-    });
+  if (cameraBtn && cameraInput) {
+    cameraBtn.addEventListener('click', () => cameraInput.click());
   }
 
-  if (uploadBtn && fileInput) {
-    uploadBtn.addEventListener('click', () => {
-      fileInput.removeAttribute('capture');
-      fileInput.click();
-    });
+  if (uploadBtn && uploadInput) {
+    uploadBtn.addEventListener('click', () => uploadInput.click());
   }
 });
 
@@ -704,11 +699,13 @@ function togglePhotoForm() {
 function clearPhotoForm() {
   const dateEl = document.getElementById('photoDate');
   const descEl = document.getElementById('photoDesc');
-  const fileInput = document.getElementById('photoFile');
+  const camInput = document.getElementById('photoFileCamera');
+  const upInput = document.getElementById('photoFileUpload');
   const img = document.getElementById('photoPreview');
   if (dateEl) dateEl.value = new Date().toISOString().slice(0,10);
   if (descEl) descEl.value = '';
-  if (fileInput) fileInput.value = '';
+  if (camInput) camInput.value = '';
+  if (upInput) upInput.value = '';
   if (img) {
     img.src = '';
     img.classList.add('hidden');
@@ -716,11 +713,19 @@ function clearPhotoForm() {
 }
 
 function emailPhoto() {
-  const fileInput = document.getElementById('photoFile');
+  const camInput = document.getElementById('photoFileCamera');
+  const upInput = document.getElementById('photoFileUpload');
   const dateEl = document.getElementById('photoDate');
   const descEl = document.getElementById('photoDesc');
 
-  if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+  // prefer whichever input has a file
+  const fileInput = (camInput && camInput.files && camInput.files.length)
+    ? camInput
+    : (upInput && upInput.files && upInput.files.length)
+      ? upInput
+      : null;
+
+  if (!fileInput) {
     alert('Please select a photo to send');
     return;
   }
